@@ -13,6 +13,8 @@ public class BuilderCSV {
     private static String Action;
     private static String ExpectedResult;
     private static String Data;
+    private static String[] header = {"TestId", "TestType", "Summary", "Description", "Action", "ExpectedResult", "Data", "Label"};
+    private static int headerVal = 0;
 
     public static void main() throws IOException {
 
@@ -22,26 +24,25 @@ public class BuilderCSV {
             System.out.println("INFO STATUS: FileName MUST be declared !!");
             System.out.println("***************************************");
             System.exit(0);
-
         }else{
-
             List<String[]> csvData = createCsvDataSimple(TestId, Summary, Description, Action, ExpectedResult, Data);
             try (CSVWriter writer = new CSVWriter(new FileWriter("src/test/java/BuilderCSV/"+CSVName+".csv",true))) {
                 writer.writeAll(csvData);
             }
-
         }
 
     }
 
     private static List<String[]> createCsvDataSimple(String TestId, String Summary, String Description, String Action, String ExpectedResult, String Data) {
         List<String[]> list = new ArrayList<>();
-        String[] header = {"TestId", "TestType", "Summary", "Description", "Action", "ExpectedResult", "Data", "Label"};
-        list.add(header);
-
             String[] record = {TestId, "API",Summary, Description, Action, ExpectedResult, Data, "API_TEST"};
-            list.add(record);
-
+            if(headerVal==0){
+                headerVal=1;
+                list.add(header);
+                list.add(record);
+            }else{
+                list.add(record);
+            }
         return list;
     }
 
